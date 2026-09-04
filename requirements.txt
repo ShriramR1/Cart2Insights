@@ -1,0 +1,8 @@
+Python
+Pandas
+Jupyter Notebook
+SQLAlchemy
+MySQL
+Streamlit
+Matplotlib
+Python-doten
