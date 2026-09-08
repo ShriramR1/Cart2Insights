@@ -1,7 +1,4 @@
-"""Cart2Insights - Olist E-Commerce Dashboard
-
-Run with: streamlit run app.py
-"""
+"""Cart2Insights - Olist E-Commerce Dashboard"""
 
 import streamlit as st
 
@@ -11,7 +8,7 @@ from database import get_engine
 
 
 # ============================================================
-# PAGE CONFIGURATION
+# PAGE CONFIG
 # ============================================================
 
 st.set_page_config(
@@ -29,21 +26,69 @@ engine = get_engine()
 
 
 # ============================================================
-# SIDEBAR NAVIGATION
+# DESIGN
+# ============================================================
+
+st.markdown("""
+<style>
+.stApp {
+    background-color: #EAEDED;
+}
+
+[data-testid="stSidebar"] {
+    background-color: #131921;
+}
+
+[data-testid="stSidebar"] * {
+    color: white !important;
+}
+
+h1 {
+    color: #131921 !important;
+}
+
+h2, h3 {
+    color: #232F3E !important;
+}
+
+div[data-testid="stMetric"] {
+    background-color: white;
+    border-top: 4px solid #FF9900;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+
+div[data-testid="stMetric"] label {
+    color: #5F6B76 !important;
+    font-weight: 600;
+}
+
+div[data-testid="stMetric"] [data-testid="stMetricValue"] {
+    color: #131921 !important;
+    font-weight: 700;
+}
+</style>
+""", unsafe_allow_html=True)
+
+
+# ============================================================
+# SIDEBAR
 # ============================================================
 
 st.sidebar.title("🛒 Cart2Insights")
+st.sidebar.caption("Olist E-Commerce Analytics")
 
 page = st.sidebar.radio(
-    "Go to",
+    "EXPLORE",
     [
         "Business Overview",
         "Sales Analysis",
         "Customer Analysis",
         "Seller & Product Analysis",
         "Delivery Analysis",
-        "Customer Experience",
-    ],
+        "Customer Experience"
+    ]
 )
 
 
@@ -53,35 +98,44 @@ page = st.sidebar.radio(
 
 if page == "Business Overview":
 
-    st.title("📊 Business Overview")
+    st.title("Business Overview")
+    st.caption("Marketplace performance at a glance")
 
-    kpis = q.get_kpis(engine)
+    k = q.get_kpis(engine)
+    score = q.avg_review(engine)
 
-    col1, col2, col3, col4, col5 = st.columns(5)
+    cols = st.columns(3)
 
-    col1.metric(
+    cols[0].metric(
         "Total Revenue",
-        u.format_currency(kpis["total_revenue"])
+        u.format_currency(k["total_revenue"])
     )
 
-    col2.metric(
+    cols[1].metric(
         "Total Orders",
-        u.format_number(kpis["total_orders"])
+        u.format_number(k["total_orders"])
     )
 
-    col3.metric(
+    cols[2].metric(
         "Total Customers",
-        u.format_number(kpis["total_customers"])
+        u.format_number(k["total_customers"])
     )
 
-    col4.metric(
+    cols = st.columns(3)
+
+    cols[0].metric(
         "Total Sellers",
-        u.format_number(kpis["total_sellers"])
+        u.format_number(k["total_sellers"])
     )
 
-    col5.metric(
-        "Avg Order Value",
-        u.format_currency(kpis["avg_order_value"])
+    cols[1].metric(
+        "Average Order Value",
+        u.format_currency(k["avg_order_value"])
+    )
+
+    cols[2].metric(
+        "Average Review Score",
+        f"{score:.2f} ⭐"
     )
 
 
@@ -91,40 +145,36 @@ if page == "Business Overview":
 
 elif page == "Sales Analysis":
 
-    st.title("💰 Sales Analysis")
-
-    st.subheader("Revenue Over Time")
+    st.title("Sales Analysis")
+    st.caption("Revenue, product and location performance")
 
     trend = q.get_revenue_trend(engine)
+
+    st.subheader("Monthly Revenue Trend")
 
     st.line_chart(
         trend.set_index("month")["revenue"]
     )
 
-    st.subheader("Top 10 Categories by Revenue")
+    category = q.get_revenue_by_category(engine)
 
-    category_revenue = q.get_revenue_by_category(engine)
+    st.subheader("Revenue by Category")
 
     st.bar_chart(
-        category_revenue.set_index("category")["revenue"]
+        category.set_index("category")["revenue"]
     )
 
-    st.subheader("Top 10 Products by Items Sold")
-
     products = q.top_products(engine)
+
+    st.subheader("Top-Selling Products")
 
     st.bar_chart(
         products.set_index("product")["items_sold"]
     )
 
-    st.dataframe(
-        products,
-        use_container_width=True
-    )
-
-    st.subheader("Revenue by Customer State")
-
     location = q.sales_by_state(engine)
+
+    st.subheader("Sales by Location")
 
     st.bar_chart(
         location.set_index("state")["revenue"]
@@ -137,17 +187,16 @@ elif page == "Sales Analysis":
 
 elif page == "Customer Analysis":
 
-    st.title("👥 Customer Analysis")
-
-    st.subheader("Customers by State")
+    st.title("Customer Analysis")
+    st.caption("Customer distribution, spending and retention")
 
     states = q.get_customers_by_state(engine)
+
+    st.subheader("Customer Distribution by State")
 
     st.bar_chart(
         states.set_index("state")["customers"]
     )
-
-    st.subheader("Repeat vs New Customers")
 
     repeat = q.get_repeat_vs_new(engine)
 
@@ -156,31 +205,30 @@ elif page == "Customer Analysis":
         1: "Repeat"
     })
 
-    col1, col2 = st.columns(2)
+    c1, c2 = st.columns(2)
 
-    with col1:
+    with c1:
 
-        st.caption("Number of Customers")
+        st.subheader("Repeat vs New Customers")
 
         st.bar_chart(
             repeat.set_index("label")["customers"]
         )
 
-    with col2:
+    with c2:
 
-        st.caption("Average Spending (R$)")
+        st.subheader("Customer Spending")
 
         st.bar_chart(
             repeat.set_index("label")["avg_spending"]
         )
 
-    st.subheader("Top 10 Customers by Spending")
-
     customers = q.top_customers(engine)
 
-    st.dataframe(
-        customers,
-        use_container_width=True
+    st.subheader("Top Customers by Spending")
+
+    st.bar_chart(
+        customers.set_index("customer_id")["spending"]
     )
 
 
@@ -190,41 +238,31 @@ elif page == "Customer Analysis":
 
 elif page == "Seller & Product Analysis":
 
-    st.title("🏪 Seller & Product Analysis")
+    st.title("Seller & Product Analysis")
+    st.caption("Seller contribution, ratings and product performance")
 
-    st.subheader("Top 10 Sellers by Revenue")
+    sellers = q.get_top_sellers(engine)
 
-    top_sellers = q.get_top_sellers(engine)
-
-    st.dataframe(
-        top_sellers,
-        use_container_width=True
-    )
-
-    st.subheader("Top 10 Categories by Items Sold")
-
-    category_metrics = q.get_category_metrics(engine)
+    st.subheader("Top Sellers by Revenue")
 
     st.bar_chart(
-        category_metrics.set_index("category")["items_sold"]
+        sellers.set_index("seller_id")["seller_revenue"]
     )
 
-    st.dataframe(
-        category_metrics,
-        use_container_width=True
-    )
+    category = q.get_category_metrics(engine)
 
-    st.subheader("Top 10 Sellers by Average Rating")
+    st.subheader("Product / Category Performance")
+
+    st.bar_chart(
+        category.set_index("category")["items_sold"]
+    )
 
     ratings = q.seller_ratings(engine)
 
+    st.subheader("Seller Ratings")
+
     st.bar_chart(
         ratings.set_index("seller_id")["rating"]
-    )
-
-    st.dataframe(
-        ratings,
-        use_container_width=True
     )
 
 
@@ -234,44 +272,47 @@ elif page == "Seller & Product Analysis":
 
 elif page == "Delivery Analysis":
 
-    st.title("🚚 Delivery Analysis")
+    st.title("Delivery Analysis")
+    st.caption("Delivery speed, delays and location performance")
 
     summary = q.get_delivery_summary(engine)
 
-    on_time_rate = (
+    rate = (
         summary["on_time_orders"]
         / summary["delivered_orders"]
         * 100
     )
 
-    col1, col2 = st.columns(2)
+    c1, c2 = st.columns(2)
 
-    col1.metric(
-        "On-Time Delivery Rate",
-        u.format_percent(on_time_rate)
+    c1.metric(
+        "On-Time Delivery",
+        u.format_percent(rate)
     )
 
-    col2.metric(
-        "Avg Delivery Time",
-        f"{summary['avg_delivery_days']:.1f} days"
+    c2.metric(
+        "Average Delivery Time",
+        f'{summary["avg_delivery_days"]:.1f} days'
     )
-
-    st.subheader("Delivery Status")
 
     status = q.delivery_status(engine)
+
+    st.subheader("On-Time vs Delayed Orders")
 
     st.bar_chart(
         status.set_index("status")["orders"]
     )
 
-    st.subheader("Average Delivery Delay by State")
+    state = q.get_delivery_by_state(engine)
 
-    st.caption("Positive = late, negative = early")
+    st.subheader("Delivery Performance by Location")
 
-    by_state = q.get_delivery_by_state(engine)
+    st.caption(
+        "Positive = late delivery | Negative = early delivery"
+    )
 
     st.bar_chart(
-        by_state.set_index("state")["avg_delay"]
+        state.set_index("state")["avg_delay"]
     )
 
 
@@ -281,39 +322,33 @@ elif page == "Delivery Analysis":
 
 elif page == "Customer Experience":
 
-    st.title("⭐ Customer Experience")
-
-    score = q.avg_review(engine)
-
-    st.metric(
-        "Average Review Score",
-        f"{score:.2f} / 5"
-    )
-
-    st.subheader("Review Score Distribution")
+    st.title("Customer Experience")
+    st.caption("Reviews, ratings and delivery satisfaction")
 
     reviews = q.get_review_distribution(engine)
+
+    st.subheader("Review Score Distribution")
 
     st.bar_chart(
         reviews.set_index("review_score")["reviews"]
     )
 
-    st.subheader("Top 10 Categories by Average Rating")
-
     category = q.reviews_by_category(engine)
+
+    st.subheader("Reviews by Category")
 
     st.bar_chart(
         category.set_index("category")["rating"]
     )
 
-    st.subheader("Average Delivery Delay by Review Score")
+    delay = q.get_review_vs_delivery(engine)
+
+    st.subheader("Rating vs Delivery Performance")
 
     st.caption(
-        "Lower review scores tend to come with longer delays"
+        "Compare delivery delay with customer review score"
     )
 
-    review_delay = q.get_review_vs_delivery(engine)
-
     st.bar_chart(
-        review_delay.set_index("review_score")["avg_delay"]
+        delay.set_index("review_score")["avg_delay"]
     )
