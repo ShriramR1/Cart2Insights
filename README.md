@@ -57,47 +57,37 @@ Present the analysis through an interactive Streamlit dashboard.
 
 ## Final Findings
 
-Format: **Observation → Interpretation → Business Impact**
+**Format: Observation → Interpretation → Business Impact**
 
 ### 1. Marketplace overall relies on high single-purchase customer volume
 
-- **Observation:** The marketplace is dominated by individual one-time buyers, with more than 90,000 new customers compared with only a very small proportion of repeat customers.
+* **Observation:** The marketplace is dominated by one-time buyers, with more than 90,000 customers making only a single purchase and only a small proportion returning for additional purchases.
+* **Interpretation:** The platform currently depends heavily on continuously acquiring new customers rather than generating strong recurring purchasing behavior from existing customers.
+* **Business Impact:** Improving Customer Lifetime Value (LTV) should be a key growth strategy. Personalized product recommendations, post-purchase communication, and targeted cross-category promotions can encourage existing customers to make repeat purchases.
 
-- **Interpretation:** The platform behaves primarily as a transaction-driven customer acquisition marketplace rather than a business with strong recurring purchasing behavior. This creates a high dependency on continuously attracting new customers.
+### 2. Repeat customers demonstrate significantly higher spending value
 
-- **Business Impact:** Improving Customer Lifetime Value (LTV) should become an important growth strategy. Automated post-purchase communication, personalized product recommendations, and cross-category promotions can encourage existing customers to purchase again without depending entirely on additional customer acquisition.
+* **Observation:** Repeat customers have an average spending value of approximately R$307.65, compared with around R$160.28 for first-time customers, meaning repeat customers spend nearly twice as much.
+* **Interpretation:** Customers who return to the marketplace demonstrate higher purchasing value and represent an important revenue opportunity.
+* **Business Impact:** Converting a portion of one-time buyers into repeat customers can increase revenue without relying entirely on acquiring new customers. Loyalty programs, personalized recommendations, and targeted offers can support this conversion.
 
-### 2. Geographic order density dictates operational bottleneck severity
+### 3. Delivery performance has a strong relationship with customer satisfaction
 
-- **Observation:** Order volume and revenue are strongly concentrated in Southeast states such as São Paulo (SP), Rio de Janeiro (RJ), and Minas Gerais (MG). In contrast, remote states such as Acre (AC), Amapá (AP), and Roraima (RR) have substantially lower order volumes and weaker delivery-time performance.
+* **Observation:** Orders delivered on time receive an average review score of approximately 4.29, while delayed orders receive an average score of around 2.27.
+* **Interpretation:** Delivery reliability has a strong relationship with customer satisfaction. Delays can significantly reduce the likelihood of customers giving positive reviews.
+* **Business Impact:** Improving delivery reliability should be treated as a customer-experience priority. Better delivery tracking, proactive delay notifications, and improved fulfillment planning can help reduce negative customer feedback.
 
-- **Interpretation:** High-density urban markets benefit from stronger logistics networks, while long-distance deliveries to remote regions face greater transportation and last-mile challenges.
+### 4. Geographic concentration creates different operational requirements
 
-- **Business Impact:** Delivery estimates should be adapted according to geographic conditions. More realistic delivery windows for remote regions can improve expectation management and potentially reduce negative customer feedback caused by missed delivery estimates.
+* **Observation:** Order volume and revenue are strongly concentrated in Southeast states such as São Paulo (SP), Rio de Janeiro (RJ), and Minas Gerais (MG), while remote states have substantially lower order volumes and weaker delivery-time performance.
+* **Interpretation:** High-density regions benefit from stronger logistics networks, while long-distance deliveries to remote regions face greater transportation and last-mile challenges.
+* **Business Impact:** Logistics and fulfillment resources can be prioritized according to regional demand. Delivery estimates can also be adapted for remote locations to provide more realistic customer expectations.
 
-### 3. Review score distribution is heavily polarized
+### 5. A small group of top sellers contributes significantly to marketplace revenue
 
-- **Observation:** Customer reviews are strongly concentrated around 5-star ratings, with approximately 60,000 high-rating reviews, while 1-star reviews form a significant secondary group of roughly 12,000 reviews. Middle ratings such as 2 and 3 stars represent a much smaller share.
-
-- **Interpretation:** Customer feedback appears to be driven strongly by the overall experience. Customers tend to leave very high ratings when their experience is satisfactory, while poor experiences can result in strongly negative ratings.
-
-- **Business Impact:** Proactive customer communication can help reduce dissatisfaction. Delay notifications, order-status updates, and early intervention when an order is at risk can give customers better visibility and potentially prevent avoidable low ratings.
-
-### 4. Category volume and unit value create different revenue drivers
-
-- **Observation:** `bed_bath_table` records the highest product/order volume, with more than 11,000 orders, while categories such as `health_beauty` and `watches_gifts` generate strong monetary revenue despite having lower or comparable order volumes.
-
-- **Interpretation:** High-volume categories generate substantial transaction and logistics activity, whereas categories with stronger monetary value per order contribute significantly to overall revenue efficiency.
-
-- **Business Impact:** Product merchandising can combine high-volume products with higher-value complementary products. Cross-selling and checkout recommendations can increase Average Order Value (AOV) while making better use of every shipment.
-
-### 5. Historical sales growth shows strong seasonal concentration
-
-- **Observation:** Revenue increases from late 2016 through 2017, with a major sales peak around November 2017 reaching approximately R$1.2M. Revenue subsequently maintains a relatively high plateau before the dataset reaches its cutoff period.
-
-- **Interpretation:** Marketplace demand is influenced by strong seasonal and promotional periods, with major sales events creating significant increases in transaction activity.
-
-- **Business Impact:** Sellers, logistics partners, and marketplace operations should prepare inventory, fulfillment capacity, and infrastructure well ahead of major seasonal periods. Better peak-season planning can help capture additional demand while reducing the risk of delivery delays.
+* **Observation:** The top 10 sellers, representing only around 0.3% of active sellers, contribute approximately 13.1% of total marketplace revenue.
+* **Interpretation:** Marketplace revenue is concentrated among a relatively small group of high-performing sellers, while the majority of sellers contribute smaller individual revenue amounts.
+* **Business Impact:** Retaining and supporting high-performing sellers can help protect a significant portion of marketplace revenue. Dedicated seller support and performance-based programs can strengthen long-term seller relationships.
 
 ## Technology Stack
 
