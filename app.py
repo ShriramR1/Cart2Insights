@@ -1,4 +1,5 @@
-"""Cart2Insights - Olist E-Commerce Dashboard"""
+"""Cart2Insights - Olist E-Commerce Dashboard
+command to run : streamlit run app.py"""
 
 import streamlit as st
 
