@@ -2,8 +2,8 @@
 
 
 def format_currency(value):
-    """Show a number as Indian Rupee currency, e.g. ₹ 1,234.56"""
-    return f"₹ {value:,.2f}"
+    """Show a number as Brazilian Real currency, e.g. R$ 1,234.56"""
+    return f"R$ {value:,.2f}"
 
 
 def format_number(value):
